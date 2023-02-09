@@ -55,7 +55,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Orders func(childComplexity int) int
+		ListOrders func(childComplexity int) int
 	}
 }
 
@@ -63,7 +63,7 @@ type MutationResolver interface {
 	CreateOrder(ctx context.Context, input *model.OrderInput) (*model.Order, error)
 }
 type QueryResolver interface {
-	Orders(ctx context.Context) ([]*model.Order, error)
+	ListOrders(ctx context.Context) ([]*model.Order, error)
 }
 
 type executableSchema struct {
@@ -121,12 +121,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Order.Tax(childComplexity), true
 
-	case "Query.orders":
-		if e.complexity.Query.Orders == nil {
+	case "Query.ListOrders":
+		if e.complexity.Query.ListOrders == nil {
 			break
 		}
 
-		return e.complexity.Query.Orders(childComplexity), true
+		return e.complexity.Query.ListOrders(childComplexity), true
 
 	}
 	return 0, false
@@ -211,7 +211,7 @@ input OrderInput {
 }
 
 type Query {
-  orders: [Order!]!
+    ListOrders: [Order!]!
 }
 
 type Mutation {
@@ -529,8 +529,8 @@ func (ec *executionContext) fieldContext_Order_FinalPrice(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_orders(ctx, field)
+func (ec *executionContext) _Query_ListOrders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_ListOrders(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -543,7 +543,7 @@ func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Orders(rctx)
+		return ec.resolvers.Query().ListOrders(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -559,7 +559,7 @@ func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.Col
 	return ec.marshalNOrder2ᚕᚖgithubᚗcomᚋMrHenriᚋCleanArchᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_orders(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_ListOrders(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -2633,7 +2633,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "orders":
+		case "ListOrders":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -2642,7 +2642,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_orders(ctx, field)
+				res = ec._Query_ListOrders(ctx, field)
 				return res
 			}
 
